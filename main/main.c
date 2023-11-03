@@ -1,40 +1,25 @@
 #include "main.h"
-
 void LedToggleThread(void *arg);
-void TelnetThread(void *arg);
 int main(void)
 {
-    nvic_priority_group_config(NVIC_PRIORITY_GROUP_4);
     system_clock_config();
+    // char *test1 = (char *)malloc(256);
+
+    // char *test2 = (char *)malloc(256);
+
+    // for (uint8_t i = 1, j = 255; i < 255; i++)
+    // {
+    //     test1[i] = i;
+    //     test2[i] = test1[j--];
+    // }
     xTaskCreate(LedToggleThread, "LedTask", 90, NULL, 3, NULL);
     vTaskStartScheduler();
-
     while (1)
     {
         /* code */
     }
 
     return 0;
-}
-
-void TelnetThread(__attribute__((unused)) void *arg)
-{
-    error_status status;
-    uint32_t count = 100;
-    status = emac_system_init();
-
-    while (status == ERROR)
-        ;
-
-    tcpip_stack_init();
-
-    helloworld_init();
-    while (count--)
-    {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-
-    vTaskDelete(NULL);
 }
 
 void LedToggleThread(__attribute__((unused)) void *arg)
