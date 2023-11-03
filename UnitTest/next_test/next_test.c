@@ -1,11 +1,17 @@
-#include "main.h"
+
+#include "at32f435_437_clock.h"
+#include "FreeRTOS.h"
+#include "FreeRTOSConfig.h"
+#include "task.h"
+
 void LedToggleThread(void *arg);
+
 int main(void)
 {
     system_clock_config();
-
     xTaskCreate(LedToggleThread, "LedTask", 90, NULL, 3, NULL);
     vTaskStartScheduler();
+
     while (1)
     {
         /* code */

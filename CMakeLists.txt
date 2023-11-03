@@ -81,5 +81,9 @@ set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 target_link_libraries(${PROJECT_NAME}.elf freertos_kernel)
 add_subdirectory("${CMAKE_SOURCE_DIR}/githublibs/FreeRTOS/FreeRTOS/Source")
 
+#добавляет к проекту lwip
 add_subdirectory("${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting")
 target_link_libraries(${PROJECT_NAME}.elf EthernetArtery)
+
+#добавляет к проекту unit_test
+add_subdirectory("${CMAKE_SOURCE_DIR}/UnitTest")

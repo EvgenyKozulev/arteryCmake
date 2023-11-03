@@ -30,24 +30,39 @@ CodeSys
 
 ```
 ├── CMakeLists.txt                      // Главный cmake list
-├── ExtLibs                             // Внешние библиотеки
-│   ├── FreeRTOS_settings               // Настройки FreeRTOS
-│   ├── artery_platform                 // Всё что относится к платформе + настройки тактирования
-|   │   ├── CMakeLists.txt              // Для сборки библиотеки CMSIS
-│   |   └── /.platform settings./
-|   └── lwip_settings                   // Настройки и опции lwip
-|       ├── ArteryPortOptsLwip          // lwipopts.h+port
-|       └── CMakelists.txt              // запускает родной toolchain от lwip
 |
 |
-├── FreeRTOS                            // submodule FreeRTOS https://github.com/FreeRTOS/FreeRTOS
-|   ├── CMakeLists.txt                  // Родной cmakeList FreeRTOS
-|   └── /.FreeRTOS./
-|   
-├── lwip                                // submodule lwip https://git.savannah.nongnu.org/git/lwip.git
-|   ├── src
-|   |   └── Filelists.cmake             // Родной toolchain от lwip      
-|   └── /.LWIP./
+├── ArteryPlatform                      // настройка платформы
+|   ├── inc                             // библиотеки настройки тактирования - autogen
+|   ├── linker                          // !!! видоизмененный скрипт линкера (определение начала и конца динамической памяти)
+|   ├── src                             // src библиотек тактирования - autogen
+|   ├── clockGen.APCC                   // autogen AT32_New_Clock_Configuration.exe 
+|   └── CMakeLists.txt                  // cmake для сборки платформы+тактирование
+|
+├── ExternLibOpts                       // Настройки внешних библиотек
+│   ├── FreeRtosConfig                  // Настройки FreeRTOS
+|   ├── lwipSetting                     // Настройки и опции lwip
+|   |   ├── port+phy+mdio               // arteryEmac+arteryPHY+port
+|   |   └── CMakelists.txt              // запускает родной toolchain от lwip связывает lwip c artery emac через EthernetArtery
+|   └── VisibilityOPTS.cmake            // настраивает видимость headers библиотек и настроек в проекте
+|
+├── githublibs                          // библиотеки подключенные в виде субмодулей с https://github.com 
+|   ├── FreeRTOS                        // submodule FreeRTOS https://github.com/FreeRTOS/FreeRTOS
+|   |   ├── CMakeLists.txt              // Родной cmakeList FreeRTOS
+|   |   └── /.FreeRTOS./
+|   |   
+|   ├── lwip                            // submodule lwip https://git.savannah.nongnu.org/git/lwip.git
+|   |   ├── src
+|   |   |   └── Filelists.cmake         // Родной toolchain от lwip      
+|   |   └── /.LWIP./
+|   |
+|   └── AT32F435_437_Firmware_Library   // submodule https://github.com/ArteryTek/AT32F435_437_Firmware_Library.git 
+|
+|
+|
+|
+├── NewLibs                             // Нет библиотек для Artery от производителя - необходимы для arm-none-eabi-gcc
+|   └── /.NewLib./
 |
 ├── main                                // main
 │   ├── main.h
@@ -55,7 +70,7 @@ CodeSys
 |
 ├── IntLibs                             // Внутренние библиотеки (на данный момент модуль не реализован)
 │   ├── CMakeLists.txt                  // CMakeLists для сборки всех внутренних библиотек 
-|   ├── MZTA_HAL                        // Пример библиотеки
+|   ├── lib_1                           // Пример библиотеки
 |   |   ├── CMakeLists.txt              // CMakeLists опционально если необходима Кроссплатформенность
 |   |   ├── /.head./                    
 |   |   └── /.src./                     
