@@ -68,6 +68,8 @@ add_custom_target(flash
     COMMENT "Flashing ${PROJECT_NAME}.elf with OpenOCD"
 )
 
+include("${CMAKE_SOURCE_DIR}/ExternLibOpts/VisibilityOPTS.cmake")
+
 # добавляет к проекту FreeRTOS
 add_library(freertos_config INTERFACE)
 set(freertos_include "${CMAKE_SOURCE_DIR}/ExternLibOpts/FreeRtosConfig"
@@ -78,4 +80,6 @@ set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
 set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 target_link_libraries(${PROJECT_NAME}.elf freertos_kernel)
 add_subdirectory("${CMAKE_SOURCE_DIR}/githublibs/FreeRTOS/FreeRTOS/Source")
-include("${CMAKE_SOURCE_DIR}/ExternLibOpts/VisibilityOPTS.cmake")
+
+add_subdirectory("${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting")
+target_link_libraries(${PROJECT_NAME}.elf EthernetArtery)
