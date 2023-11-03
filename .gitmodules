@@ -1,9 +1,9 @@
 [submodule "githublibs/AT32F435_437_Firmware_Library"]
 	path = githublibs/AT32F435_437_Firmware_Library
-	url = C:\\evgeny\\artery\\arteryCmake\\githublibs\\AT32F435_437_Firmware_Library
+	url = https://github.com/ArteryTek/AT32F435_437_Firmware_Library.git
 [submodule "githublibs/FreeRTOS"]
 	path = githublibs/FreeRTOS
-	url = C:\\evgeny\\artery\\arteryCmake\\githublibs\\FreeRTOS\\
+	url = https://github.com/FreeRTOS/FreeRTOS.git
 [submodule "githublibs/lwip"]
 	path = githublibs/lwip
-	url = C:\\evgeny\\artery\\arteryCmake\\githublibs\\lwip\\
+	url = https://git.savannah.nongnu.org/git/lwip.git
