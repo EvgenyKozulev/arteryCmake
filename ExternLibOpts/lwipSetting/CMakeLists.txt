@@ -9,6 +9,7 @@ set(LWIP_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting"
 
 include("${CMAKE_SOURCE_DIR}/githublibs/lwip/src/Filelists.cmake")
 
+# FreeRTOS port перенесен в папку lwipSettings
 # include("${CMAKE_SOURCE_DIR}/githublibs/lwip/contrib/Filelists.cmake")
 set(EthernetPortSrc "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/atEmac/at32_emac.c"
     "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port/ethernetif.c"
@@ -23,4 +24,4 @@ target_link_libraries(EthernetArtery ArteryPlatform)
 set(IncludePath "${LWIP_INCLUDE_DIRS}"
     "${CMAKE_SOURCE_DIR}/githublibs/AT32F435_437_Firmware_Library/libraries/cmsis/cm4/device_support"
     "${CMAKE_SOURCE_DIR}/githublibs/lwip/src/include/lwip")
-target_include_directories(EthernetArtery PUBLIC "${IncludePath}")
+target_include_directories(EthernetArtery PRIVATE "${IncludePath}")

@@ -7,5 +7,15 @@
 #include "FreeRTOSConfig.h"
 #include "task.h"
 
+#include "lwipopts.h"
+#include "lwip/tcp.h"
+#include "lwip/priv/tcp_priv.h"
+#include "lwip/udp.h"
+#include "netif/etharp.h"
+#include "lwip/dhcp.h"
+#include "lwip/init.h"
+#include "ethernetif.h"
+#include "at32_emac.h"
+#include "lwip/netif.h"
 
 #endif //__Main_h__
