@@ -53,13 +53,13 @@ add_custom_command(
 )
 
 # Add custom target for debugging with OpenOCD
-set(OpenOCD_Bin_Path "c:/Program Files/AT32IDE/OpenOCD/bin")
-set(OpenOCD_Scripts_Path "c:/Program Files/AT32IDE/OpenOCD/scripts/")
-add_custom_target(debug
-    COMMAND ${OpenOCD_Bin_Path}/openocd.exe -s ${OpenOCD_Scripts_Path} -f interface/atlink.cfg -f target/at32f437xM.cfg
-    DEPENDS ${PROJECT_NAME}.elf
-    COMMENT "Starting debugging session with OpenOCD"
-)
+# set(OpenOCD_Bin_Path "c:/Program Files/AT32IDE/OpenOCD/bin")
+# set(OpenOCD_Scripts_Path "c:/Program Files/AT32IDE/OpenOCD/scripts/")
+# add_custom_target(debug
+# COMMAND ${OpenOCD_Bin_Path}/openocd.exe -s ${OpenOCD_Scripts_Path} -f interface/atlink.cfg -f target/at32f437xM.cfg
+# DEPENDS ${PROJECT_NAME}.elf
+# COMMENT "Starting debugging session with OpenOCD"
+# )
 
 # Add custom target for flashing the program with OpenOCD
 add_custom_target(flash
@@ -75,7 +75,7 @@ set(freertos_include "${CMAKE_SOURCE_DIR}/ExternLibOpts/FreeRtosConfig"
 target_include_directories(freertos_config SYSTEM INTERFACE "${freertos_include}") # The config file directory
 target_compile_definitions(freertos_config INTERFACE projCOVERAGE_TEST=0)
 set(FREERTOS_HEAP "4" CACHE STRING "" FORCE)
-set( FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
+set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 target_link_libraries(${PROJECT_NAME}.elf freertos_kernel)
 add_subdirectory("${CMAKE_SOURCE_DIR}/githublibs/FreeRTOS/FreeRTOS/Source")
 include("${CMAKE_SOURCE_DIR}/ExternLibOpts/FreeRtosConfig/VisibilityOPTS.cmake")
