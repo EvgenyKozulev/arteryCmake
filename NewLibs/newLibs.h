@@ -1,5 +1,7 @@
 #ifndef __NewLibCallStabs_h__
 #define __NewLibCallStabs_h__
+#include "at32f435_437_usart.h"
+#include <stdint.h>
 #warning "You use the functions of the standard library (NEWLIB), so you should implement these methods according to your own platform If you're sure you don't need to implement these, just add an empty implementation to the link add link."
 
 

@@ -1,7 +1,7 @@
 #include "newLibs.h"
 
 static int MemRegs;
-
+usart_type *usart_x = STDOUT_DEBUG_PRINTF;
 __attribute__((weak)) void _close(void)
 {
     while (1)
@@ -28,13 +28,13 @@ __attribute__((weak)) void _read(void)
 // Функция _ioputchar () in NewLib
 __attribute__((weak)) int _write(__attribute__((unused)) int fd, const void *buffer, unsigned int count)
 {
-    // uint8_t *buf = (uint8_t *)buffer;
-    // for (size_t i = 0; i < count; i++)
-    // {
-    //     while (usart_flag_get(usart_x, USART_TDBE_FLAG) == RESET)
-    //         ;
-    //     usart_x->dt = buf[i];
-    // }
+    uint8_t *buf = (uint8_t *)buffer;
+    for (uint32_t i = 0; i < count; i++)
+    {
+        while (usart_flag_get(usart_x, USART_TDBE_FLAG) == RESET)
+            ;
+        usart_x->dt = buf[i];
+    }
     return count;
 }
 

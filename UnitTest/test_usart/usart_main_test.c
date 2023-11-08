@@ -8,7 +8,7 @@
 // #include "hUsart/hal_usart.h"
 
 void LedToggleThread(void *arg);
-// void HelloThread(void *arg);
+// void UsartHelloThread(void *arg);
 
 uint8_t GlobalHello[] = "GLOBAL Hello\r\n";
 uint8_t buf[] = "hello world\r\n";
@@ -18,7 +18,7 @@ int main(void)
     nvic_priority_group_config(NVIC_PRIORITY_GROUP_4);
     system_clock_config();
     xTaskCreate(LedToggleThread, "LedTask", 90, NULL, 3, NULL);
-    // xTaskCreate(HelloThread, "Hello_task", 512, NULL, 4, NULL);
+    // xTaskCreate(UsartHelloThread, "Hello_task", 512, NULL, 4, NULL);
     vTaskStartScheduler();
 
     while (1)
@@ -29,7 +29,7 @@ int main(void)
     return 0;
 }
 
-// void HelloThread(__attribute__((unused)) void *arg)
+// void UsartHelloThread(__attribute__((unused)) void *arg)
 // {
 //     gpio_init_type gpio_uart;
 

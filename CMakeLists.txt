@@ -18,12 +18,13 @@ set(CMAKE_ASM_COMPILER arm-none-eabi-as)
 set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
 set(CMAKE_SIZE arm-none-eabi-size)
 set(CPU_FLAG "-DAT32F437ZMT7")
+# set(RtosEN "-DUSE_RTOS")
 
 # set(CMAKE_C_GDB )
 project(Artery VERSION 0.1.0 LANGUAGES C ASM)
 
 set(LINKER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/ArteryPlatform/linker/AT32F437xM_FLASH.ld")
-set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 ${CPU_FLAG} -g -Wall")
+set(COMMON_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 ${CPU_FLAG} ${RtosEN} -g -Wall")
 
 # Опции компилятора
 # flag -Wcast-align - critical error from freeRTOS
@@ -53,8 +54,9 @@ add_custom_command(
 )
 
 # Add custom target for debugging with OpenOCD
-# set(OpenOCD_Bin_Path "c:/Program Files/AT32IDE/OpenOCD/bin")
-# set(OpenOCD_Scripts_Path "c:/Program Files/AT32IDE/OpenOCD/scripts/")
+set(OpenOCD_Bin_Path "c:/Program Files/AT32IDE/OpenOCD/bin")
+set(OpenOCD_Scripts_Path "c:/Program Files/AT32IDE/OpenOCD/scripts/")
+
 # add_custom_target(debug
 # COMMAND ${OpenOCD_Bin_Path}/openocd.exe -s ${OpenOCD_Scripts_Path} -f interface/atlink.cfg -f target/at32f437xM.cfg
 # DEPENDS ${PROJECT_NAME}.elf
@@ -81,9 +83,12 @@ set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 target_link_libraries(${PROJECT_NAME}.elf freertos_kernel)
 add_subdirectory("${CMAKE_SOURCE_DIR}/githublibs/FreeRTOS/FreeRTOS/Source")
 
-#добавляет к проекту lwip
+# добавляет к проекту lwip
 add_subdirectory("${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting")
 target_link_libraries(${PROJECT_NAME}.elf EthernetArtery)
 
-#добавляет к проекту unit_test
+include("${CMAKE_SOURCE_DIR}/intLib/internLibsRule.cmake")
+target_link_libraries(${PROJECT_NAME}.elf HalLib)
+
+# добавляет к проекту unit_test
 add_subdirectory("${CMAKE_SOURCE_DIR}/UnitTest")
