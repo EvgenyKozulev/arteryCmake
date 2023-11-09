@@ -1,27 +1,47 @@
 cmake_minimum_required(VERSION 3.15)
 
 set(LWIP_DIR "${CMAKE_SOURCE_DIR}/githublibs/lwip")
-set(LWIP_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting"
-    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port"
-    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port/arch"
-    "${CMAKE_SOURCE_DIR}/githublibs/lwip/src/include"
-    "${CMAKE_SOURCE_DIR}/githublibs/lwip/contrib")
+set(lwipOptsPath "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting")
 
-include("${CMAKE_SOURCE_DIR}/githublibs/lwip/src/Filelists.cmake")
+set(hEmakPath "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/hEmac")
+set(PortPath "${CMAKE_SOURCE_DIR}/githublibs/lwip/contrib/ports/freertos/include"
+    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port")
 
-# FreeRTOS port перенесен в папку lwipSettings
-# include("${CMAKE_SOURCE_DIR}/githublibs/lwip/contrib/Filelists.cmake")
-set(EthernetPortSrc "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/atEmac/at32_emac.c"
-    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port/ethernetif.c"
-    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port/sys_arch.c")
+set(LWIP_INCLUDE_DIRS
+    "${LWIP_DIR}/src/include"
+    "${LWIP_DIR}/contrib"
+    "${PortPath}"
+    "${lwipOptsPath}"
+)
+set(LWIP_CONTRIB_DIR "${CMAKE_SOURCE_DIR}/githublibs/lwip/contrib")
 
-add_library(EthernetArtery "${EthernetPortSrc}")
-target_link_libraries(EthernetArtery lwipcore)
-target_link_libraries(EthernetArtery lwipallapps)
-target_link_libraries(EthernetArtery lwipmbedtls)
-target_link_libraries(EthernetArtery ArteryPlatform)
+set(EmacSrc "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/hEmac/at32_emac.c"
+    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/hEmac/netconf.c"
+    "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/hEmac/telnet.c"
+)
+set(PortSrc "${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting/port/ethernetif.c"
+     "${CMAKE_SOURCE_DIR}/githublibs/lwip/contrib/ports/freertos/sys_arch.c"
+)
+set(lwipDPath "${CMAKE_SOURCE_DIR}/githublibs/lwip/src/include/lwip")
+# set(LWIP_DEFINITIONS LWIP_DEBUG=1)
 
-set(IncludePath "${LWIP_INCLUDE_DIRS}"
-    "${CMAKE_SOURCE_DIR}/githublibs/AT32F435_437_Firmware_Library/libraries/cmsis/cm4/device_support"
-    "${CMAKE_SOURCE_DIR}/githublibs/lwip/src/include/lwip")
-target_include_directories(EthernetArtery PRIVATE "${IncludePath}")
+include(${LWIP_DIR}/src/Filelists.cmake)
+# include(${LWIP_DIR}/contrib/Filelists.cmake)
+
+add_library(hEthernet "${PortSrc}" "${EmacSrc}")
+
+target_include_directories(hEthernet PUBLIC
+    "${LWIP_INCLUDE_DIRS}"
+    "${hEmakPath}"
+    "${PortPath}"
+    "${lwipDPath}")
+
+target_link_libraries(hEthernet lwipallapps lwipcore ArteryPlatform freertos_kernel)
+# target_link_libraries(hEthernet lwipcontribapps lwipallapps lwipcore ArteryPlatform freertos_kernel)
+
+target_link_libraries(lwipallapps hEthernet)
+target_link_libraries(lwipcore hEthernet)
+
+# target_link_libraries(lwipcontribapps hEthernet)
+
+# target_link_libraries(ArteryPlatform hEthernet)

@@ -23,10 +23,10 @@
  */
 
 /* includes ------------------------------------------------------------------*/
+// #include "at32f435_437_board.h"
 #include "lwip/dhcp.h"
 #include "at32_emac.h"
 
-static void AsmDelay(uint32_t countNop);
 /** @addtogroup AT32F437_periph_examples
  * @{
  */
@@ -67,9 +67,8 @@ error_status emac_system_init(void)
  */
 void emac_nvic_configuration(void)
 {
-  /*
-   nvic_irq_enable(EMAC_IRQn, 1, 0);
-  */
+
+  nvic_irq_enable(EMAC_IRQn, 1, 0);
 }
 
 /**
@@ -263,7 +262,7 @@ error_status emac_layer2_configuration(void)
  * @param  none
  * @retval none
  */
-static void reset_phy(void)
+void static reset_phy(void)
 {
   gpio_init_type gpio_init_struct = {0};
   crm_periph_clock_enable(CRM_GPIOE_PERIPH_CLOCK, TRUE);
@@ -285,9 +284,9 @@ static void reset_phy(void)
 
   /*reset phy */
   gpio_bits_reset(GPIOE, GPIO_PINS_15);
-  AsmDelay(ASM_NOP_DELAY_COUNT);
+  // delay_ms(2);
   gpio_bits_set(GPIOE, GPIO_PINS_15);
-  AsmDelay(ASM_NOP_DELAY_COUNT);
+  // delay_ms(2);
 }
 
 /**
@@ -502,7 +501,6 @@ void ethernetif_set_link(void const *argument)
   /* read phy_bsr*/
   regvalue = link_update();
 
-  /*todo: add leds*/
   // if(regvalue > 0)
   // {
   //   at32_led_on(LED4);
@@ -565,7 +563,7 @@ void ethernetif_update_config(struct netif *netif)
   {
     emac_speed_config(mac_control_para.auto_nego, mac_control_para.duplex_mode, mac_control_para.fast_ethernet_speed);
 
-    AsmDelay(ASM_NOP_DELAY_COUNT<<7);
+    // delay_ms(300);
     /* enable mac and dma transmission and reception */
     emac_start();
   }
@@ -607,10 +605,7 @@ void emac_tmr_init(void)
 /**
  * @}
  */
-static void AsmDelay(uint32_t countNop)
-{
-  ASM_NOP_DELAY(countNop);
-}
+
 /**
  * @}
  */

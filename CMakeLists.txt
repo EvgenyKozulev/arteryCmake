@@ -18,7 +18,7 @@ set(CMAKE_ASM_COMPILER arm-none-eabi-as)
 set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
 set(CMAKE_SIZE arm-none-eabi-size)
 set(CPU_FLAG "-DAT32F437ZMT7")
-# set(RtosEN "-DUSE_RTOS")
+ set(RtosEN "-DUSE_RTOS")
 
 # set(CMAKE_C_GDB )
 project(Artery VERSION 0.1.0 LANGUAGES C ASM)
@@ -83,12 +83,11 @@ set(FREERTOS_PORT "GCC_ARM_CM4F" CACHE STRING "" FORCE)
 target_link_libraries(${PROJECT_NAME}.elf freertos_kernel)
 add_subdirectory("${CMAKE_SOURCE_DIR}/githublibs/FreeRTOS/FreeRTOS/Source")
 
-# добавляет к проекту lwip
 add_subdirectory("${CMAKE_SOURCE_DIR}/ExternLibOpts/lwipSetting")
-target_link_libraries(${PROJECT_NAME}.elf EthernetArtery)
+target_link_libraries(${PROJECT_NAME}.elf HalLib)
 
 include("${CMAKE_SOURCE_DIR}/intLib/internLibsRule.cmake")
-target_link_libraries(${PROJECT_NAME}.elf HalLib)
+target_link_libraries(${PROJECT_NAME}.elf hEthernet)
 
 # добавляет к проекту unit_test
 add_subdirectory("${CMAKE_SOURCE_DIR}/UnitTest")

@@ -9,6 +9,7 @@ volatile uint32_t local_time = 0;
 
 uint8_t GlobalHello[] = "GLOBAL Hello\r\n";
 uint8_t buf[] = "hello world\r\n";
+void memTest(uint8_t CountRecurse);
 
 int main(void)
 {
@@ -29,21 +30,19 @@ int main(void)
 
 void hNetHelloThread(__attribute__((unused)) void *arg)
 {
-    error_status status;
-    status = emac_system_init();
-    while (status == ERROR)
+    while (emac_system_init() == ERROR)
         ;
-
     tcpip_stack_init();
-    tcp_client_init(TCP_LOCAL_PORT, TCP_SERVER_PORT, TCP_SERVER_IP);
-
+    helloworld_init();
     while (1)
     {
+
         /* lwip receive handle */
         lwip_rx_loop_handler();
 
         /*timeout handle*/
         lwip_periodic_handle(local_time);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -109,6 +108,7 @@ void UsartHelloThread(__attribute__((unused)) void *arg)
 
     PrintList(EDMA_STREAM1);
     taskEXIT_CRITICAL();
+    memTest(25);
     while (1)
     {
         vTaskDelay(10 / portTICK_PERIOD_MS);
@@ -118,6 +118,38 @@ void UsartHelloThread(__attribute__((unused)) void *arg)
     }
 }
 
+void memTest(uint8_t CountRecurse)
+{
+    char *ptr = NULL;
+    if (CountRecurse != 0)
+    {
+        ptr = (char *)malloc(255);
+        printf("countRecurse::%d\r\n", CountRecurse);
+        if (ptr == NULL)
+        {
+            printf("NULL\r\n");
+            CountRecurse = 1;
+            return;
+        }
+
+        for (char i = 0; i < 255; i++)
+        {
+            ptr[i] = i;
+            printf("ptr[%d]::0x%hx\t\tadd::%p ", i, ptr[i], &ptr[i]);
+            if ((i + 1) % 4 == 0)
+            {
+                printf("\r\n");
+            }
+        }
+        printf("\r\n");
+        memTest((--CountRecurse));
+    }
+    if (ptr != NULL)
+    {
+        printf("count::%d\tfree::%p\r\n", CountRecurse, ptr);
+        free(ptr);
+    }
+}
 void TMR6_DAC_GLOBAL_IRQHandler(void)
 {
     if (tmr_flag_get(TMR6, TMR_OVF_FLAG) != RESET)

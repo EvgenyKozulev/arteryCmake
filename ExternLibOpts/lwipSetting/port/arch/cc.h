@@ -32,7 +32,7 @@
 #ifndef LWIP_ARCH_CC_H
 #define LWIP_ARCH_CC_H
 
-typedef int sys_prot_t;
+// typedef int sys_prot_t;
 
 /* Define random number generator function */
 #define LWIP_RAND() ((u32_t)rand())
